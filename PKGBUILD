@@ -2,7 +2,7 @@
 # Based on work by Uncle Hunto <unclehunto äτ ÝãΗ00 Ð0τ ÇÖΜ> and Beini <bane aτ iki dot fi>
 
 # This PKGUILD it's based on the latest GitHub commit.
-# Pending work: man & changelog files generated automatically. 
+# Pending work: changelog files generated automatically.
 
 pkgname=eddie-ui-git
 pkgver=2.16.2
@@ -47,6 +47,18 @@ build() {
   make
   strip -S --strip-unneeded -o libLib.Platform.Linux.Native.strip.so libLib.Platform.Linux.Native.so
   cd ../..
+
+  # Build the Man Page
+  mkdir man
+  cd man
+  cp "../src/Lib.Platform.Linux.Native/libLib.Platform.Linux.Native.strip.so" "libLib.Platform.Linux.Native.so"
+  cp ../src/App.Forms.Linux/bin/$_pkgarch/Release/* .
+  mono "App.Forms.Linux.exe" \
+      --path.resources="../common/" \
+      --path.exec="eddie-ui" \
+      --cli --help --help.format=man \
+      | gzip > eddie-ui.8.gz
+  cd ..
 }
 
 package() {
@@ -67,7 +79,7 @@ package() {
   install -Dm644 "common/icon_gray.png"       "$pkgdir/usr/share/eddie-ui/tray_gray.png"
   # install -Dm644 "resources/arch/usr/share/doc/eddie-ui/changelog.Debian.gz" "$pkgdir/usr/share/doc/eddie-ui/changelog.gz" # TOFIX: Missing changelog generation
   install -Dm644 "resources/arch/usr/share/doc/eddie-ui/copyright"    "$pkgdir/usr/share/doc/eddie-ui/copyright"
-  # install -Dm644 "resources/arch/usr/share/man/man8/eddie-ui.8.gz"    "$pkgdir/usr/share/man/man1/eddie-ui.8.gz" # TOFIX: Missing man generation
+  install -Dm644 "man/eddie-ui.8.gz"    "$pkgdir/usr/share/man/man8/eddie-ui.8.gz"
   install -Dm644 "resources/arch/usr/share/polkit-1/actions/org.airvpn.eddie.ui.policy" "$pkgdir/usr/share/polkit-1/actions/org.airvpn.eddie.ui.policy"
   install -Dm644 "resources/arch/usr/share/pixmaps/eddie-ui.png"  "$pkgdir/usr/share/pixmaps/eddie-ui.png"
 
