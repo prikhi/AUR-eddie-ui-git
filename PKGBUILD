@@ -5,7 +5,7 @@
 # Pending work: changelog files generated automatically.
 
 pkgname=eddie-ui-git
-pkgver=2.16.3
+pkgver=2.17.2
 pkgrel=1
 pkgdesc='Eddie - OpenVPN UI - beta version'
 arch=('i686' 'x86_64')
@@ -36,7 +36,7 @@ build() {
 
   # Compile C sources (Tray)
   cd src/UI.GTK.Linux.Tray
-  cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_LIBRARY_OUTPUT_DIRECTORY=.  
+  cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_LIBRARY_OUTPUT_DIRECTORY=.
   make
   strip -S --strip-unneeded -o eddie-tray-strip eddie_tray
   cd ../..
@@ -77,11 +77,13 @@ package() {
   install -Dm644 "common/icon_gray.png"       "$pkgdir/usr/share/eddie-ui/icon_gray.png"
   install -Dm644 "common/icon.png"       "$pkgdir/usr/share/eddie-ui/tray.png"
   install -Dm644 "common/icon_gray.png"       "$pkgdir/usr/share/eddie-ui/tray_gray.png"
+  install -Dm644 "common/iso-3166.json"       "$pkgdir/usr/share/eddie-ui/iso-3166.json"
   # install -Dm644 "resources/arch/usr/share/doc/eddie-ui/changelog.Debian.gz" "$pkgdir/usr/share/doc/eddie-ui/changelog.gz" # TOFIX: Missing changelog generation
   install -Dm644 "resources/arch/usr/share/doc/eddie-ui/copyright"    "$pkgdir/usr/share/doc/eddie-ui/copyright"
   install -Dm644 "man/eddie-ui.8.gz"    "$pkgdir/usr/share/man/man8/eddie-ui.8.gz"
   install -Dm644 "resources/arch/usr/share/polkit-1/actions/org.airvpn.eddie.ui.policy" "$pkgdir/usr/share/polkit-1/actions/org.airvpn.eddie.ui.policy"
   install -Dm644 "resources/arch/usr/share/pixmaps/eddie-ui.png"  "$pkgdir/usr/share/pixmaps/eddie-ui.png"
+
 
   ## Fix .desktop file for KDE
   _desktop_session=$(printf "%s" "$DESKTOP_SESSION" | awk -F "/" '{print $NF}')
